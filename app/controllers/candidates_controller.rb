@@ -28,8 +28,21 @@ class CandidatesController < ApplicationController
     if @candidate.update(candidate_params)
       redirect_to candidates_path, notice: "資料更新成功"
     else
-      redner :edit
+      render :edit
     end
+  end
+
+  def destroy
+    @candidate = Candidate.find_by(id: params[:id])
+    @candidate.destroy if @candidate
+    redirect_to candidates_path, notice: "候選人資料已刪除"
+  end
+
+  def vote
+    @candidate = Candidate.find_by(id: params[:id])
+    @candidate.increment(:votes)
+    @candidate.save
+    redirect_to candidates_path, notice: "完成投票"
   end
 
   private
